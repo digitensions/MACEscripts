@@ -9,6 +9,7 @@ from ffprobe3 import FFProbe
 # Array of arrays with each internal array representing an expected input resolution.
 # Includes ratios called in confirmation of FFprobe stream request.
 # Gives shortform name for each expected corresponding .png watermark file.
+# .png files are sized the same as SD, HD, Full HD and cropped HD (1440x1080) video
 aspects = [[720,  "4:3",  "SD"],
           [1280, "16:9",  "HD"],
           [1920, "16:9", "FHD"],
@@ -17,7 +18,7 @@ aspects = [[720,  "4:3",  "SD"],
 # Main function, script entrypoint.
 def main():
         # In regards to 'argument', it refers to each value after 'python'/'python3':
-        # e.g. 'python main.py home/example/video.mpeg'
+        # e.g. 'python main.py home/example/video.mp4'
         # In the above example, 'main.py' is argument 0, and the path is argument 1.
         # This is because all indexing in programming languages starts at 0.
 
@@ -43,9 +44,9 @@ def main():
 
                         # Ask user for their preferred output filename/filepath.
                         outpath = input("Where would you like the output saved?\n"
-                                        "e.g. 'home/Dave/Desktop/output.mpeg'\n"
+                                        "e.g. 'home/Dave/Desktop/output.mp4'\n"
                                         "Providing only a filename will export to the directory the script is in.\n"
-                                        "e.g. 'file.mpeg' with no path.\n")
+                                        "e.g. 'file.mp4' with no path.\n")
 
                         while True:
                                 # Obtain user input.
@@ -80,8 +81,8 @@ def main():
                         # If the user selects to trim...
                         elif var == "y":
                                 # Get the start and end trim in points from the user.
-                                trimstart = input("Please specify the trim in point. (hh:mm:ss.mls 00:00:00.000)\n")
-                                trimend = input("Please specify the trim out point. (hh:mm:ss.mls 00:00:00.000)\n")
+                                trimstart = input("Please specify the trim 'in' point. (hh:mm:ss.mls 00:00:00.000)\n")
+                                trimend = input("Please specify the trim 'out' point. (hh:mm:ss.mls 00:00:00.000)\n")
                                 
                                 if wtrmrk == "y":
                                         # Make the ffmpeg call.
