@@ -23,3 +23,4 @@ Then the FFmpeg encoding will begin and the .mp4 will be placed in your specifie
 
 External libraries are required for this script including FFmpeg-python PyPi available from: https://pypi.org/project/ffmpeg-python/
 
+NOTE: There may be inaccuracies experienced with the trim function in FFmpeg which can be caused by the in/out points skipping forward or backward to the nearest keyframe. At present I'm unsure how to resolve this issue so please be mindful of this if you intend to use this code for actual archival MP4 production.
