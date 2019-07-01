@@ -10,14 +10,16 @@ We hope to add more in coming weeks, and for MACE to attempt codes of their own 
 This script has been developed for anyone to easily trim a file and overlay a watermark for quick/easy distribution to clients. It has been developed to accept the four archival audiovisual file dimensions kept at MACE: SD 720x576; HD 1280x720; Full HD 1920x1080; and Cropped HD 1440x1080.  The .png watermarks are the same dimensions as the video files, and for test purposes we use a MACE logo centralised and set at 20% opacity. These PNGs should be stored alongside the main.py script in a directory named 'watermarks'.
 
 To run the code call:
-python3 main.py /path_to_file/input.mov
+`python3 main.py /path_to_file/input.mov`
 
 The script will ask:
+```
 Do you want to trim this file? (y/n); 
 Where would you like the output file saved? (drag and drop a directory before typing name_of_file.mp4); 
 Do you want a watermark overlay on the output video? (y/n); 
 Please specify the trim 'in' point. (hh:mm:ss.mls 00:00:00.000); 
 Please specify the trim 'out' point. (hh:mm:ss.mls 00:00:00.000).
+```
 
 Then the FFmpeg encoding will begin and the .mp4 will be placed in your specified location.
 
