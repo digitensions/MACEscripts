@@ -1,7 +1,7 @@
 # MACEscripts
 MACE generated python codes
 
-This repository contains python3 script(s) made collaboratively between James Wingate doctoral researcher in Computer Science at University of Lincoln, and Joanna White of the Media Archive of Central England.  Wherever possible these will be heavily notated to help MACE's python development, and for any individuals wishing to read or reuse them.
+This repository contains python3 script(s) made collaboratively between James Wingate doctoral researcher in Computer Science at University of Lincoln, and Joanna White of the Media Archive of Central England.  Wherever possible these will be heavily notated to help MACE's python development, and for any individuals wishing to read or test them. Please note these are TRAINING SCRIPTS and require further development/testing.
 
 We hope to add more in coming weeks, and for MACE to attempt codes of their own in following months. We welcome any commends, feedback and collaboration.
 
