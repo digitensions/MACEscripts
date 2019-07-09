@@ -88,9 +88,8 @@ def main():
                                         # Make the ffmpeg call.
                                         (
                                                 ffmpeg
-                                                .trim(start = trimstart)
                                                 .input(sys.argv[1])
-                                                .trim(end = trimend)
+                                                .trim(start = trimstart, end = trimend)
                                                 .overlay(watermark)
                                                 .output(outpath, vcodec = "libx264", pix_fmt = "yuv420p", acodec = "aac", crf = "23")
                                                 .run()
@@ -99,9 +98,8 @@ def main():
                                         # Make the ffmpeg call.
                                         (
                                                 ffmpeg
-                                                .trim(start = trimstart)
                                                 .input(sys.argv[1])
-                                                .trim(end = trimend)
+                                                .trim(start = trimstart, end = trimend)
                                                 .output(outpath, vcodec = "libx264", pix_fmt = "yuv420p", acodec = "aac", crf = "23")
                                                 .run()
                                         )
