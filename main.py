@@ -74,7 +74,7 @@ def main():
                                                 ffmpeg
                                                 .input(sys.argv[1])
                                                 .filter('setdar', getDAR(aspectRatio))
-                                                .output(outpath, vcodec = "libx264", acodec = "aac")
+                                                .output(outpath, vcodec = "libx264", pix_fmt = "yuv420p", acodec = "aac", crf = "23")
                                                 .run()
                                         )
 
@@ -88,19 +88,20 @@ def main():
                                         # Make the ffmpeg call.
                                         (
                                                 ffmpeg
-                                                .input(sys.argv[1])
                                                 .trim(start = trimstart, end = trimend)
+                                                .input(sys.argv[1])
                                                 .overlay(watermark)
-                                                .output(outpath, vcodec = "libx264", acodec = "aac")
+                                                .output(outpath, vcodec = "libx264", pix_fmt = "yuv420p", acodec = "aac", crf = "23")
                                                 .run()
                                         )
                                 else:
                                         # Make the ffmpeg call.
                                         (
                                                 ffmpeg
+                                                .trim(start = trimstart)
                                                 .input(sys.argv[1])
-                                                .trim(start = trimstart, end = trimend)
-                                                .output(outpath, vcodec = "libx264", acodec = "aac")
+                                                .trim(end = trimend)
+                                                .output(outpath, vcodec = "libx264", pix_fmt = "yuv420p", acodec = "aac", crf = "23")
                                                 .run()
                                         )
                 else:
