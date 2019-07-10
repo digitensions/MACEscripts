@@ -1,7 +1,7 @@
 # MACEscripts
 MACE generated python codes
 
-This repository contains python3 script(s) made collaboratively between James Wingate doctoral researcher in Computer Science at University of Lincoln, and Joanna White of the Media Archive of Central England.  Wherever possible these will be heavily notated to help MACE's python development, and for any individuals wishing to read or test them. Please note these are TRAINING SCRIPTS and require further development/testing.
+This repository contains python3 script(s) made collaboratively between James Wingate doctoral researcher in Computer Science at University of Lincoln, and Joanna White of the Media Archive of Central England.  Wherever possible these will be heavily notated to help MACE's python development, and for any individuals wishing to read or test them. Please note these are TRAINING SCRIPTS and require further development/testing.  The scripts are intended to meet / fulfil AV preservation needs though, based on MACE workflows.
 
 We hope to add more in coming weeks, and for MACE to attempt codes of their own in following months. We welcome any commends, feedback and collaboration.
 
@@ -26,3 +26,7 @@ Then the FFmpeg encoding will begin and the .mp4 will be placed in your specifie
 External libraries are required for this script including FFmpeg-python PyPi available from: https://pypi.org/project/ffmpeg-python/
 
 NOTE: There may be inaccuracies experienced with the trim function in FFmpeg which can be caused by the in/out points skipping forward or backward to the nearest keyframe. At present I'm unsure how to resolve this issue so please be mindful of this if you intend to use this code for actual archival MP4 production.
+
+# Main_new.py
+
+A variation on Main.py that has removed ffmpeg-python for the FFmpeg calls and replaced with subprocess calls, that allow you to more directly dictate the way your FFmpeg command is called.  This is essential to allow the -ss call to fall before the -i on the command line.  The crop function still needs more testing as there are long gop issues with this function - have to read up more and see if there are ways of making crops more accurate.  We've only tested with input files that are ProRes 422HQ so far.
