@@ -1,4 +1,4 @@
-#Coded by James Wingate and Joanna White
+#Coded by James Wingate, small amendments by Joanna White :)
 
 import os
 import sys
@@ -100,10 +100,10 @@ def main():
                                         # Make the ffmpeg call using subprocess call with watermark.
                                         mp4_trim = [
                                                 'ffmpeg', '-ss', trimstart,    # Placing trimstart ahead of input
+                                                '-to', trimend,                # specfies trimend input
                                                 '-i', sys.argv[1],             # calls path to file
                                                 '-i', getWatermark(aspectRatio), # inputs watermark required for file DAR
                                                 '-filter_complex', 'overlay',  # Filter overlay for watermark
-                                                '-to', trimend,                # specfies trimend input
                                                 '-c:v', 'libx264',             # Output to H264 mp4
                                                 '-pix_fmt', 'yuv420p',         # 4:2:0 pix_fmt call
                                                 '-c:a', 'aac',                 # Audio set to AAC
@@ -116,8 +116,8 @@ def main():
                                         # Make the ffmpeg call without watermark.
                                         mp4_trim = [
                                                 'ffmpeg', '-ss', trimstart,    # Placing trimstart ahead of input
-                                                '-i', sys.argv[1],             # calls path to file
                                                 '-to', trimend,                # specfies trimend input
+                                                '-i', sys.argv[1],             # calls path to file
                                                 '-c:v', 'libx264',             # Output to H264 mp4
                                                 '-pix_fmt', 'yuv420p',         # 4:2:0 pix_fmt call
                                                 '-c:a', 'aac',                 # Audio set to AAC
