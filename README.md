@@ -5,7 +5,7 @@ This repository contains python3 script(s) made collaboratively between James Wi
 
 We hope to add more in coming weeks, and for MACE to attempt codes of their own in following months. We welcome any commends, feedback and collaboration.
 
-# Main.py
+# main.py
 
 This script has been developed for anyone to easily trim a file and overlay a watermark for quick/easy distribution to clients. It has been developed to accept the four archival audiovisual file dimensions kept at MACE: SD 720x576; HD 1280x720; Full HD 1920x1080; and Cropped HD 1440x1080.  The .png watermarks are the same dimensions as the video files, and for test purposes we use a MACE logo centralised and set at 20% opacity. These PNGs should be stored alongside the main.py script in a directory named 'watermarks'.
 
@@ -27,6 +27,15 @@ External libraries are required for this script including FFmpeg-python PyPi ava
 
 NOTE: There may be inaccuracies experienced with the trim function in FFmpeg which can be caused by the in/out points skipping forward or backward to the nearest keyframe. At present I'm unsure how to resolve this issue so please be mindful of this if you intend to use this code for actual archival MP4 production.
 
-# Main_new.py
+# main_new.py
 
 A variation on Main.py that has removed ffmpeg-python for the FFmpeg calls and replaced with subprocess calls, that allow you to more directly dictate the way your FFmpeg command is called.  This is essential to allow the -ss call to fall before the -i on the command line.  The crop function still needs more testing as there are long gop issues with this function - have to read up more and see if there are ways of making crops more accurate.  We've only tested with input files that are ProRes 422HQ so far.
+
+# name_change.py
+
+This code searches within named columns in an excel (xlsx or csv) file, then changes existing filename from Column 2 to Column 1. It was written to help with batch filename changes. It creates a variable that focuses on two (or more) column names for the search. It uses a for loop to work through the rows within the column that end with .mov. It uses pandas to match files to a row, extract the contents of the first column then changes all ':' to '.'. The script then uses os.rename to change the filename to the entry in Column 1.
+
+You would run this by first changing the code so your paths are correct (I might update this to take inputs in future), then run the command as:
+```
+python3 name_change.py
+```
