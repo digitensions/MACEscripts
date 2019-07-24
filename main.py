@@ -22,9 +22,13 @@ def main():
         # In the above example, 'main.py' is argument 0, and the path is argument 1.
         # This is because all indexing in programming languages starts at 0.
 
-        # If the number of arguments passed is greater than or equal to 2...
-        if len(sys.argv) >= 2:
-                # Set the path variable to the 2nd argument (path).
+        if len(sys.argv) < 2:
+            print('Please call the script with the path to a video file!\n'
+                  'e.g. python3 main.py path/to/video.mkv')
+
+        # If the script has been called with two or more arguments
+        else:
+                # Set the input_file variable to the 2nd argument (input file path).
                 input_file = sys.argv[1]
 
                 # If the path is a legitimate file...
