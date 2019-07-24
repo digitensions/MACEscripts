@@ -106,11 +106,6 @@ def main():
                 else:
                         print("ERROR: Path not valid.")
 
-# Function to parse the trim time from the given string.
-def parse_time(time_string):
-        # Splits input time into format [hours, minutes, [seconds, milliseconds]].
-        return [val.split('.') for val in time_string.split(':')]
-
 # Function to get the DAR from a given aspect ratio string.
 def display_aspect_ratio(string):
         vals = [int(val) for val in string.split(':')]
