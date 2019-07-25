@@ -11,10 +11,29 @@ import re
 # Includes ratios called in confirmation of FFprobe stream request.
 # Gives shortform name for each expected corresponding .png watermark file.
 # .png files are sized the same as SD, HD, Full HD and cropped HD (1440x1080) video
-RESOLUTIONS = [[720,  "4:3",  "SD"],
-              [1280, "16:9",  "HD"],
-              [1920, "16:9", "FHD"],
-              [1440,  "4:3", "CHD"]]
+RESOLUTIONS = {
+  'SD': {
+    'aspect_ratio': '4:3',
+    'width':         720,
+    'full_name':    'Standard definition'
+  },
+  'HD': {
+    'aspect_ratio': '16:9',
+    'width':         1280,
+    'full_name':    'High definition'
+  },
+  'FHD': {
+    'aspect_ratio': '16:9',
+    'width':         1920,
+    'full_name':    'Full high definition'
+  },
+  'CHD': {
+    'aspect_ratio': '4:3',
+    'width':         1440,
+    'full_name':    'Cropped high definition'
+  },
+}
+
 
 # Main function, script entrypoint.
 def main():
@@ -120,27 +139,26 @@ def display_aspect_ratio(string):
 def aspect_ratio_and_resolution(file):
         file_metadata = FFProbe(file)
 
+        ratio = None
         for stream in file_metadata.streams:
                 if stream.is_video():
                         width, height = stream.frame_size()
-                        
-                        ratio = ""
-                        for resolution in RESOLUTIONS:
-                                if resolution[0] == width:
-                                        ratio = resolution[1]
-                                        break
 
-                        if ratio == "":
+                        for resolution in RESOLUTIONS:
+                                if RESOLUTIONS[resolution]['width'] == width:
+                                        ratio = RESOLUTIONS[resolution]['aspect_ratio']
+
+                        if not ratio:
                                 print("Incompatible input dimensions.")
                                 sys.exit()
-                        
+
         return ratio, [width, height]
 
 # Function to get a path to a corresponding .png watermark given an aspect ratio string.
 def watermark_path(ratio):
-        for resolution in RESOLUTIONS:
-                if resolution[1] == ratio:
-                        standard = resolution[2]
+        for name, data in RESOLUTIONS.items():
+                if RESOLUTIONS[name]['aspect_ratio'] == ratio:
+                        standard = name # sets standard to "HD", "SD", etc
 
         file_name = "{0}.png".format(standard)
         file_path = os.path.join(os.getcwd(), "watermarks", file_name)
