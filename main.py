@@ -5,6 +5,7 @@ import sys
 import ffmpeg
 from ffmpeg import probe
 from ffprobe3 import FFProbe
+import re
 
 # Array of arrays with each internal array representing an expected input resolution.
 # Includes ratios called in confirmation of FFprobe stream request.
@@ -85,8 +86,8 @@ def main():
                         # If the user selects to trim...
                         elif to_trim == "y":
                                 # Get the start and end trim in points from the user.
-                                in_point = input("Please specify the trim 'in' point. (hh:mm:ss.mls 00:00:00.000)\n")
-                                out_point = input("Please specify the trim 'out' point. (hh:mm:ss.mls 00:00:00.000)\n")
+                                in_point = collect_timestamp("Please specify the trim 'in' point")
+                                out_point = collect_timestamp("Please specify the trim 'out' point")
 
                                 if watermark == "y":
                                         # Make the ffmpeg call.
@@ -144,6 +145,28 @@ def watermark_path(ratio):
         file_name = "{0}.png".format(standard)
         file_path = os.path.join(os.getcwd(), "watermarks", file_name)
         return file_path
+
+
+def collect_timestamp(message):
+    timestamp = input("{0}. (hh:mm:ss.mls 00:00:00.000)\n".format(message))
+
+    if valid_timestamp(timestamp):
+        return timestamp
+    else:
+        print("Invalid timestamp! \nIt must be in the format hh:mm:ss.mls (00:00:00.000).")
+        try_again = input("Try again? ('y'/'n')")
+        if try_again == 'y':
+            collect_timestamp(message)
+        else:
+            print('Exiting!')
+            sys.exit()
+
+
+def valid_timestamp(timestamp):
+    TIMESTAMP_REGEX = re.compile('\d{2}:\d{2}:\d{2}.\d{3}') # Matches the pattern 00:00:00.000 (hh:mm:ss.mls)
+    match = re.search(TIMESTAMP_REGEX, timestamp)
+    return bool(match)
+
 
 # Run the main function as entrypoint.
 if __name__ == '__main__':
