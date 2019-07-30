@@ -64,7 +64,7 @@ def main():
                                 
                         # Get aspect ratio, resolution, and watermark image.
                         aspect_ratio, resolution = aspect_ratio_and_resolution(input_file)
-                        watermark = ffmpeg.input(watermark_path(aspect_ratio))
+                        watermark_file = ffmpeg.input(watermark_path(aspect_ratio))
 
                         # Ask user for their preferred output filename/filepath.
                         output_path = input("Where would you like the output saved?\n"
@@ -88,7 +88,7 @@ def main():
                                                 ffmpeg
                                                 .input(input_file)
                                                 .filter('setdar', display_aspect_ratio(aspect_ratio))
-                                                .overlay(watermark)
+                                                .overlay(watermark_file)
                                                 .output(output_path)
                                                 .run()
                                         )
@@ -114,7 +114,7 @@ def main():
                                                 ffmpeg
                                                 .input(input_file)
                                                 .trim(start = in_point, end = out_point)
-                                                .overlay(watermark)
+                                                .overlay(watermark_file)
                                                 .output(output_path, vcodec = "libx264", pix_fmt = "yuv420p", acodec = "aac", crf = "23")
                                                 .run()
                                         )
