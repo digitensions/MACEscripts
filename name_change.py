@@ -12,7 +12,7 @@ def main():
     xlsx = xlsx[['Column Title 1', 'Column Title 2']]
     
     # Variable to define path to directory contain files for renaming (mov in this case)
-    vidpath = '/Users/cakedandgreen/Dropbox/Computer Science Videos'
+    vidpath = '/Users/path_to_directory/Rename Videos'
     # For loop using os.listdir, to loop through each file in the directory vidpath
     for file in os.listdir(vidpath):
         # Only select the files that end with .mov
