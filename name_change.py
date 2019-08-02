@@ -18,7 +18,7 @@ def main():
         # Only select the files that end with .mov
         if (file.endswith(".mov")):
             # Variable newname uses pandas .loc (locate) to find a row which matches file, and .iloc[0] (integer locate) removes the column titles and only returns the name value from the row, [0].replace get's the first value and replaces all : with .
-            newname = xlsx.loc[xlsx.loc[:, 'UFH CID number'] == file].iloc[0][0].replace(':', '.')
+            newname = xlsx.loc[xlsx.loc[:, 'Column Title 2'] == file].iloc[0][0].replace(':', '.')
             # Uses os.rename to changes the vidpath/file to vidpath/newname and adds a .mov to the end
             os.rename(vidpath + '/' + file, vidpath + '/' + newname + '.mov')
 
