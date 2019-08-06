@@ -55,33 +55,18 @@ def main():
 
         # If the path is a legitimate file...
         else:
-            # Loop until break is called.
-            while True:
-                # Obtain user input.
-                to_trim = input("Do you want to trim this file? (y/n)\n")
-                if not (to_trim == "y" or to_trim == "n"):
-                    print("Invalid input, please enter either 'y' or 'n'.")
-                else:
-                    break
+            to_trim = set_trim_status()
+            to_watermark = set_watermark_status()
+            # Ask user for their preferred output filename/filepath.
+            output_path = set_output_path(input_file)
 
             # Get aspect ratio and watermark image.
             aspect_ratio = stream_aspect_ratio(input_file)
             watermark_file = ffmpeg.input(watermark_path(aspect_ratio))
 
-            # Ask user for their preferred output filename/filepath.
-            output_path = set_output_path(input_file)
-
-            while True:
-                # Obtain user input.
-                watermark = input("Do you want a watermark overlay on the output video? (y/n)\n")
-                if not (watermark == "y" or watermark == "n"):
-                    print("Invalid input, please enter either 'y' or 'n'.")
-                else:
-                    break
-
             # If the user selects to not trim...
-            if to_trim == "n":
-                if watermark == "y":
+            if not to_trim:
+                if to_watermark:
                     # Make the ffmpeg call.
                     (
                         ffmpeg
@@ -102,14 +87,14 @@ def main():
                     )
 
             # If the user selects to trim...
-            elif to_trim == "y":
+            elif to_trim:
                 # Get the start and end trim in points from the user.
                 in_point = set_timestamp(
                     "Please specify the trim 'in' point")
                 out_point = set_timestamp(
                     "Please specify the trim 'out' point")
 
-                if watermark == "y":
+                if to_watermark:
                     # Make the ffmpeg call.
                     (
                         ffmpeg
@@ -188,6 +173,26 @@ def set_output_path(input_path):
               "Saving as default: {0}".format(default_output_path))
 
         return default_output_path
+
+
+def set_trim_status():
+    trim = input("Do you want to trim this file? ('y'/'n')\n")
+
+    if not (trim == "y" or trim == "n"):
+        print("Invalid input! I'll ask again")
+        set_trim_status()
+    else:
+        return trim == "y"
+
+
+def set_watermark_status():
+    use_watermark = input("Do you want a watermark overlay on the output video? ('y'/'n')\n")
+
+    if not (use_watermark == "y" or use_watermark == "n"):
+        print("Invalid input! I'll ask again")
+        set_watermark_status()
+    else:
+        return use_watermark == "y"
 
 
 def set_timestamp(message):
