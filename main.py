@@ -50,8 +50,11 @@ def main():
         # Set the input_file variable to the 2nd argument (input file path).
         input_file = sys.argv[1]
 
+        if not (os.path.isfile(input_file)):
+            print("ERROR: Path not valid.")
+
         # If the path is a legitimate file...
-        if (os.path.isfile(input_file)):
+        else:
             # Loop until break is called.
             while True:
                 # Obtain user input.
@@ -73,7 +76,7 @@ def main():
 
             while True:
                 # Obtain user input.
-                watermark = input("Do you want a watermark overlay on the output video? (y/n)")
+                watermark = input("Do you want a watermark overlay on the output video? (y/n)\n")
                 if not (watermark == "y" or watermark == "n"):
                     print("Invalid input, please enter either 'y' or 'n'.")
                 else:
@@ -104,9 +107,9 @@ def main():
             # If the user selects to trim...
             elif to_trim == "y":
                 # Get the start and end trim in points from the user.
-                in_point = collect_timestamp(
+                in_point = set_timestamp(
                     "Please specify the trim 'in' point")
-                out_point = collect_timestamp(
+                out_point = set_timestamp(
                     "Please specify the trim 'out' point")
 
                 if watermark == "y":
@@ -128,8 +131,6 @@ def main():
                         .output(output_path, vcodec="libx264", pix_fmt="yuv420p", acodec="aac", crf="23")
                         .run()
                     )
-        else:
-            print("ERROR: Path not valid.")
 
 
 def display_aspect_ratio(string):
@@ -163,7 +164,7 @@ def aspect_ratio_and_resolution(file):
 def watermark_path(ratio):
     # Function to get a path to a corresponding .png watermark given an aspect ratio string.
 
-    for name, data in RESOLUTIONS.items():
+    for name, _ in RESOLUTIONS.items():
         if RESOLUTIONS[name]["aspect_ratio"] == ratio:
             standard = name  # sets standard to "HD", "SD", etc
 
@@ -172,7 +173,7 @@ def watermark_path(ratio):
     return file_path
 
 
-def collect_timestamp(message):
+def set_timestamp(message):
     timestamp = input("{0}. (hh:mm:ss.mls 00:00:00.000)\n".format(message))
 
     if valid_timestamp(timestamp):
@@ -180,9 +181,9 @@ def collect_timestamp(message):
     else:
         print("Invalid timestamp!\n"
               "It must be in the format hh:mm:ss.mls (00:00:00.000).")
-        try_again = input("Try again? ('y'/'n')")
+        try_again = input("Try again? ('y'/'n')\n")
         if try_again == 'y':
-            collect_timestamp(message)
+            set_timestamp(message)
         else:
             print("Exiting!")
             sys.exit()
