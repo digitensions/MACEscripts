@@ -88,7 +88,7 @@ def main():
                         .input(input_file)
                         .filter("setdar", display_aspect_ratio(aspect_ratio))
                         .overlay(watermark_file)
-                        .output(output_path)
+                        .output(output_path, vcodec="libx264", pix_fmt="yuv420p", acodec="aac", crf="23")
                         .run()
                     )
                 else:
