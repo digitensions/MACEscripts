@@ -69,10 +69,7 @@ def main():
             watermark_file = ffmpeg.input(watermark_path(aspect_ratio))
 
             # Ask user for their preferred output filename/filepath.
-            output_path = input("Where would you like the output saved?\n"
-                                "e.g. 'home/Dave/Desktop/output.mp4'\n"
-                                "Providing only a filename will export to the directory the script is in.\n"
-                                "e.g. 'file.mp4' with no path.\n")
+            output_path = set_output_path(input_file)
 
             while True:
                 # Obtain user input.
@@ -171,6 +168,24 @@ def watermark_path(ratio):
     file_name = "{0}.png".format(standard)
     file_path = os.path.join(os.getcwd(), "watermarks", file_name)
     return file_path
+
+
+def set_output_path(input_path):
+    output_path = input("Where would you like the output saved?\n"
+                        "e.g. 'home/Dave/Desktop/output.mp4'\n"
+                        "Providing only a filename - e.g. 'file.mp4' - will export to the directory the script is in.\n")
+
+    if output_path:
+        return output_path
+
+    else:
+        filename, extension = os.path.splitext(input_path)
+        default_output_path = "{0}_access_copy{1}".format(filename, extension)
+
+        print("No output file path given!\n"
+              "Saving as default: {0}".format(default_output_path))
+
+        return default_output_path
 
 
 def set_timestamp(message):
