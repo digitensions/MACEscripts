@@ -64,8 +64,8 @@ def main():
                 else:
                     break
 
-            # Get aspect ratio, resolution, and watermark image.
-            aspect_ratio, resolution = aspect_ratio_and_resolution(input_file)
+            # Get aspect ratio and watermark image.
+            aspect_ratio = stream_aspect_ratio(input_file)
             watermark_file = ffmpeg.input(watermark_path(aspect_ratio))
 
             # Ask user for their preferred output filename/filepath.
@@ -130,19 +130,22 @@ def main():
                     )
 
 
-def display_aspect_ratio(string):
-    # Function to get the DAR from a given aspect ratio string.
+def display_aspect_ratio(ratio_string):
+    # Get the numeric ratio from the aspect ratio string, e.g. "4:3" → 1.333(3)
 
-    vals = [int(val) for val in string.split(":")]
-    return vals[0] / vals[1]
+    numbers = ratio_string.split(':')
+    width = int(numbers[0])
+    height = int(numbers[1])
+
+    return width / height
 
 
-def aspect_ratio_and_resolution(file):
-    # Function to get the aspect ratio and resolution from a given path to a video.
+def stream_aspect_ratio(file):
+    # Returns the aspect ratio expressed as a string, e.g. "4:3"
 
     file_metadata = FFProbe(file)
-
     ratio = None
+
     for stream in file_metadata.streams:
         if stream.is_video():
             width, height = stream.frame_size()
@@ -150,12 +153,11 @@ def aspect_ratio_and_resolution(file):
             for resolution in RESOLUTIONS:
                 if RESOLUTIONS[resolution]["width"] == width:
                     ratio = RESOLUTIONS[resolution]["aspect_ratio"]
+                    return ratio
 
-            if not ratio:
-                print("Incompatible input dimensions.")
-                sys.exit()
-
-    return ratio, [width, height]
+    if not ratio:
+        print("Incompatible input dimensions.")
+        sys.exit()
 
 
 def watermark_path(ratio):
