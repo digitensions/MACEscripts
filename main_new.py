@@ -72,6 +72,8 @@ def main():
                                                 '-c:a', 'aac',                                  # Audio set to AAC
                                                 '-map', '0',                                    # Map all channels to new AV file
                                                 '-dn', "%s_.mp4" % (sys.argv[1]),               # Except data streams / output MPG name _.mp4
+                                                '-metadata', 'copyright="Media Archive for Central England"'  # Copyright information
+                                                '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"'  # Comment data
                                                 '-report',                                      # Generates log (in cd directory)
                                         ]
                                         subprocess.call(mp4_notrim)
@@ -86,6 +88,8 @@ def main():
                                                 '-c:a', 'aac',                                  # Audio set to AAC
                                                 '-map', '0',                                    # Map all channels to new AV file
                                                 '-dn', "%s_.mp4" % (sys.argv[1]),               # Except data streams / output MPG name _.mp4
+                                                '-metadata', 'copyright="Media Archive for Central England"'  # Copyright information
+                                                '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"'  # Comment data
                                                 '-report',                                      # Generates log (in cd directory)
                                         ]
                                         subprocess.call(mp4_notrim)
@@ -109,6 +113,8 @@ def main():
                                                 '-c:a', 'aac',                 # Audio set to AAC
                                                 '-map', '0',
                                                 '-dn', "%s_.mp4" % (sys.argv[1]),
+                                                '-metadata', 'copyright="Media Archive for Central England"'  # Copyright information
+                                                '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"'  # Comment data
                                                 '-report',
                                         ]
                                         subprocess.call(mp4_trim)
@@ -123,6 +129,8 @@ def main():
                                                 '-c:a', 'aac',                 # Audio set to AAC
                                                 '-map', '0',
                                                 '-dn', "%s_.mp4" % (sys.argv[1]),
+                                                '-metadata', 'copyright="Media Archive for Central England"'  # Copyright information
+                                                '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"'  # Comment data
                                                 '-report',
                                         ]
                                         subprocess.call(mp4_trim)
