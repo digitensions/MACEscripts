@@ -7,25 +7,46 @@ We hope to add more in coming weeks, and for MACE to attempt codes of their own 
 
 # main.py
 
-This script has been developed for anyone to easily trim a file and overlay a watermark for quick/easy distribution to clients. It has been developed to accept the four archival audiovisual file dimensions kept at MACE: SD 720x576; HD 1280x720; Full HD 1920x1080; and Cropped HD 1440x1080.  The .png watermarks are the same dimensions as the video files, and for test purposes we use a MACE logo centralised and set at 20% opacity. These PNGs should be stored alongside the main.py script in a directory named 'watermarks'.
+This script has been developed for anyone to easily trim a file and overlay a watermark for quick/easy distribution to clients.
+
+It accepts the four archival audiovisual file dimensions kept at MACE:
+* SD 720x576
+* HD 1280x720
+* Full HD 1920x1080
+* Cropped HD 1440x1080.
+
+The `.png` watermarks are the same dimensions as the video files. MACE uses a MACE logo, centralised and set at 20% opacity; the generic watermark files stored in `/watermarks` simply feature a copyright symbol.
+
+## Dependencies
+
+* [ffmpeg-python](https://github.com/kkroening/ffmpeg-python)
+* [ffprobe3](https://github.com/DheerendraRathor/ffprobe3)
+
+## Use
 
 To run the code call:
-`python3 main.py /path_to_file/input.mov`
+```bash
+python3 main.py /path_to_file/input.mov
+```
 
 The script will ask:
 ```
-Do you want to trim this file? (y/n); 
-Where would you like the output file saved? (drag and drop a directory before typing name_of_file.mp4); 
-Do you want a watermark overlay on the output video? (y/n); 
-Please specify the trim 'in' point. (hh:mm:ss.mls 00:00:00.000); 
-Please specify the trim 'out' point. (hh:mm:ss.mls 00:00:00.000).
+Do you want to trim this file? ('y'/'n')
+Do you want a watermark overlay on the output video? ('y'/'n')
+
+Where would you like the output saved?
+e.g. 'home/Dave/Desktop/output.mp4'
+Providing only a filename - e.g. 'file.mp4' - will export to the directory the script is in.
+
+# If being trimmed:
+Please specify the trim 'in' point. (hh:mm:ss.mls 00:00:00.000)
+Please specify the trim 'out' point. (hh:mm:ss.mls 00:00:00.000)
 ```
 
-Then the FFmpeg encoding will begin and the .mp4 will be placed in your specified location.
+### ⚠️ Warning ⚠️
 
-External libraries are required for this script including FFmpeg-python PyPi available from: https://pypi.org/project/ffmpeg-python/
-
-NOTE: There may be inaccuracies experienced with the trim function in FFmpeg which can be caused by the in/out points skipping forward or backward to the nearest keyframe. At present I'm unsure how to resolve this issue so please be mindful of this if you intend to use this code for actual archival MP4 production.
+There may be inaccuracies experienced with the trim function in FFmpeg, caused by the in/out points skipping forward or backward to the nearest keyframe.  
+At present I'm unsure how to resolve this issue, so please be mindful of this if you intend to use this code for actual archival MP4 production.
 
 # main_new.py
 
