@@ -1,4 +1,4 @@
-# Coded by James Wingate for Media Archive for Central England
+# Coded by James Wingate and Katherine Frances Nagels for Media Archive for Central England
 
 import os
 import sys
