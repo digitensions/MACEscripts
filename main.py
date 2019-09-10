@@ -1,8 +1,9 @@
-# Coded by James Wingate and Katherine Frances Nagels for Media Archive for Central England
+# Coded by James Wingate, Katherine Frances Nagels and Joanna White
 
 import os
 import sys
 import ffmpeg
+import subprocess
 from ffmpeg import probe
 from ffprobe3 import FFProbe
 import re
@@ -43,7 +44,7 @@ def main():
 
     if len(sys.argv) < 2:
         print("Please call the script with the path to a video file!\n"
-              "e.g. python3 main.py path/to/video.mkv")
+              "e.g. python3 main.py path/to/video.mov")
 
     # If the script has been called with two or more arguments
     else:
@@ -67,24 +68,38 @@ def main():
             # If the user selects to not trim...
             if not to_trim:
                 if to_watermark:
-                    # Make the ffmpeg call.
-                    (
-                        ffmpeg
-                        .input(input_file)
-                        .filter("setdar", display_aspect_ratio(aspect_ratio))
-                        .overlay(watermark_file)
-                        .output(output_path, vcodec="libx264", pix_fmt="yuv420p", acodec="aac", crf="23")
-                        .run()
-                    )
+                    # Make the ffmpeg subprocess call.
+                    ffmpeg_call = [
+                        'ffmpeg',
+                        # '-map', '0',                                  # Map all channels to new AV file
+                        '-i', sys.argv[1],                              # calls path to file
+                        '-i', watermark_path(aspect_ratio),             # Path to watermark, dependent on input video DAR
+                        '-filter_complex', 'overlay',                   # overlay filter for supplied png
+                        '-c:v', 'libx264',                              # Output to H264 mp4
+                        '-pix_fmt', 'yuv420p',                          # 4:2:0 pix_fmt call
+                        #'-vf', 'yadif',                                 # Yet Another DeInterlace Filter
+                        '-metadata', 'copyright="Media Archive for Central England"',  
+                        '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"',             
+                        '-c:a', 'aac',                                  # Audio set to AAC
+                        '-report', output_path                          # Generates log (in cd directory)
+                    ]
+                    print(ffmpeg_call)
+                    subprocess.call(ffmpeg_call)
                 else:
-                    # Make the ffmpeg call.
-                    (
-                        ffmpeg
-                        .input(input_file)
-                        .filter("setdar", display_aspect_ratio(aspect_ratio))
-                        .output(output_path, vcodec="libx264", pix_fmt="yuv420p", acodec="aac", crf="23")
-                        .run()
-                    )
+                    # Make the ffmpeg subprocess call.
+                    ffmpeg_call = [
+                        'ffmpeg',
+                        '-i', sys.argv[1],
+                        '-c:v', 'libx264',
+                        '-pix_fmt', 'yuv420p',
+                        '-vf', 'yadif',
+                        '-metadata', 'copyright="Media Archive for Central England"',  
+                        '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"',
+                        '-c:a', 'aac',    
+                        '-report', output_path
+                    ]
+                    print(ffmpeg_call)
+                    subprocess.call(ffmpeg_call)
 
             # If the user selects to trim...
             elif to_trim:
@@ -95,25 +110,39 @@ def main():
                     "Please specify the trim 'out' point")
 
                 if to_watermark:
-                    # Make the ffmpeg call.
-                    (
-                        ffmpeg
-                        .input(input_file)
-                        .trim(start=in_point, end=out_point)
-                        .overlay(watermark_file)
-                        .output(output_path, vcodec="libx264", pix_fmt="yuv420p", acodec="aac", crf="23")
-                        .run()
-                    )
+                    # Make the ffmpeg subprocess call.
+                    ffmpeg_call = [
+                        'ffmpeg', '-ss', in_point,
+                        '-to', out_point,
+                        '-i', sys.argv[1],
+                        '-i', watermark_path(aspect_ratio),
+                        '-filter_complex', 'overlay',
+                        '-c:v', 'libx264',
+                        '-pix_fmt', 'yuv420p',
+                        #'-vf', 'yadif',
+                        '-metadata', 'copyright="Media Archive for Central England"',
+                        '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"', 
+                        '-c:a', 'aac',                       
+                        '-report', output_path
+                    ]
+                    print(ffmpeg_call)
+                    subprocess.call(ffmpeg_call)
                 else:
-                    # Make the ffmpeg call.
-                    (
-                        ffmpeg
-                        .input(input_file)
-                        .trim(start=in_point, end=out_point)
-                        .output(output_path, vcodec="libx264", pix_fmt="yuv420p", acodec="aac", crf="23")
-                        .run()
-                    )
-
+                    # Make the ffmpeg subprocess call.
+                    ffmpeg_call = [
+                        'ffmpeg', '-ss', in_point,
+                        '-to', out_point,
+                        '-i', input_file,
+                        '-c:v', 'libx264',
+                        '-pix_fmt', 'yuv420p',
+                        '-vf', 'yadif',
+                        '-metadata', 'copyright="Media Archive for Central England"',
+                        '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"',                        
+                        '-c:a', 'aac',                        
+                        '-report', output_path
+                    ]
+                    print(ffmpeg_call)
+                    subprocess.call(ffmpeg_call)
 
 def display_aspect_ratio(ratio_string):
     # Get the numeric ratio from the aspect ratio string, e.g. "4:3" → 1.333(3)
