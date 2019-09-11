@@ -4,7 +4,6 @@ import os
 import sys
 import ffmpeg
 import subprocess
-from ffmpeg import probe
 from ffprobe3 import FFProbe
 import re
 
