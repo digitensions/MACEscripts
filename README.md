@@ -1,13 +1,13 @@
 # MACEscripts
 Media Archive for Central England (MACE) generated python codes
 
-This repository contains python3 script(s) made collaboratively between James Wingate doctoral researcher in Computer Science at University of Lincoln, Joanna White of MACE and with excellent assistance from Katherine Frances.  Wherever possible these will be heavily notated to help MACE's python skill development, and for any individuals wishing to read or test them. Please note these are TRAINING SCRIPTS and require further development/testing.  The scripts are intended to meet / fulfil AV preservation needs though, based on MACE workflows.
+This repository contains python3 script(s) made collaboratively between James Wingate doctoral researcher in Computer Science at University of Lincoln and Joanna White of MACE, with excellent assistance from Katherine Frances.  Wherever possible these will be heavily notated to help MACE's python skill development, and for any individuals wishing to read or test them. Please note these are TRAINING SCRIPTS and require further development and testing.  The scripts are intended to fulfil AV preservation needs though, based on MACE workflows.
 
-We hope to add more in coming weeks, and for MACE to attempt codes of their own in following months. We welcome any commends, feedback and collaboration.
+We hope to add more in the future and welcome any comments, feedback and collaboration.
 
 # main.py
 
-This script has been developed for anyone to easily trim a file, deinterlace, overlay a watermark for quick/easy distribution to clients. It has metadata additions, which can be easily edited depending upon need.
+This script has been developed to trim a intraframe file, deinterlace, overlay a watermark for quick distribution to clients. It has metadata additions, which can be easily edited depending upon need.
 
 It accepts the four archival audiovisual file dimensions kept at MACE:
 * SD 720x576
@@ -19,8 +19,10 @@ The `.png` watermarks are the same dimensions as the video files, with no interl
 
 ## Dependencies
 
-FFmpeg installed, preferably version 4.1.3 upwards. See https://avpres.net/FFmpeg/#ch1 by Reto Kromer for installation instructions.
+* [FFmpeg](https://avpres.net/FFmpeg/#ch1)
 * [ffprobe3](https://github.com/DheerendraRathor/ffprobe3)
+
+We hope to test installation of Python3 and FFmpeg into VENV environments on Windows 10 devices preinstalled with Python2. If you don't have admin privileges this method could work for your testing. Read more here: [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
 ## Use
 
@@ -49,7 +51,7 @@ There may be inaccuracies experienced with the trim function in FFmpeg, caused b
 
 # main_new.py
 
-A variation on Main.py that first tested FFmpeg using subprocess calls. These have since been incorporated into main.py, and this script is fairly redundant.
+A variation on Main.py that first tested FFmpeg using subprocess calls. These have since been incorporated into main.py, and this script is redundant.
 
 # name_change.py
 
