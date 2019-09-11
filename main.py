@@ -71,14 +71,13 @@ def main():
                     # Make the ffmpeg subprocess call.
                     ffmpeg_call = [
                         'ffmpeg',
-                        # '-map', '0',                                  # Map all channels to new AV file
                         '-i', sys.argv[1],                              # calls path to file
                         '-i', watermark_path(aspect_ratio),             # Path to watermark, dependent on input video DAR
-                        '-filter_complex', 'yadif, overlay',            # deinterlace, overlay filter for supplied png
+                        '-filter_complex', "[0]yadif=0:-1:1[v];[v][1]overlay",   # yadif deinterlace, overlay filter for supplied png
                         '-c:v', 'libx264',                              # Output to H264 mp4
                         '-pix_fmt', 'yuv420p',                          # 4:2:0 pix_fmt call
-                        '-metadata', 'copyright="Media Archive for Central England"',  
-                        '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"',             
+                        '-metadata', 'copyright=Media Archive for Central England',  
+                        '-metadata', 'comment=Please contact MACE to license this footage on 01522 837750',             
                         '-c:a', 'aac',                                  # Audio set to AAC
                         '-report', output_path                          # Generates log (in cd directory)
                     ]
@@ -92,8 +91,8 @@ def main():
                         '-c:v', 'libx264',
                         '-pix_fmt', 'yuv420p',
                         '-vf', 'yadif',
-                        '-metadata', 'copyright="Media Archive for Central England"',  
-                        '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"',
+                        '-metadata', 'copyright=Media Archive for Central England',  
+                        '-metadata', 'comment=Please contact MACE to license this footage on 01522 837750',
                         '-c:a', 'aac',    
                         '-report', output_path
                     ]
@@ -115,11 +114,11 @@ def main():
                         '-to', out_point,
                         '-i', sys.argv[1],
                         '-i', watermark_path(aspect_ratio),
-                        '-filter_complex', 'yadif, overlay',
+                        '-filter_complex', "[0]yadif=0:-1:1[v];[v][1]overlay",
                         '-c:v', 'libx264',
                         '-pix_fmt', 'yuv420p',
-                        '-metadata', 'copyright="Media Archive for Central England"',
-                        '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"', 
+                        '-metadata', 'copyright=Media Archive for Central England',
+                        '-metadata', 'comment=Please contact MACE to license this footage on 01522 837750', 
                         '-c:a', 'aac',                       
                         '-report', output_path
                     ]
@@ -134,8 +133,8 @@ def main():
                         '-c:v', 'libx264',
                         '-pix_fmt', 'yuv420p',
                         '-vf', 'yadif',
-                        '-metadata', 'copyright="Media Archive for Central England"',
-                        '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"',                        
+                        '-metadata', 'copyright=Media Archive for Central England',
+                        '-metadata', 'comment=Please contact MACE to license this footage on 01522 837750',                        
                         '-c:a', 'aac',                        
                         '-report', output_path
                     ]
