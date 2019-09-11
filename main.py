@@ -74,10 +74,9 @@ def main():
                         # '-map', '0',                                  # Map all channels to new AV file
                         '-i', sys.argv[1],                              # calls path to file
                         '-i', watermark_path(aspect_ratio),             # Path to watermark, dependent on input video DAR
-                        '-filter_complex', 'overlay',                   # overlay filter for supplied png
+                        '-filter_complex', 'yadif, overlay',            # deinterlace, overlay filter for supplied png
                         '-c:v', 'libx264',                              # Output to H264 mp4
                         '-pix_fmt', 'yuv420p',                          # 4:2:0 pix_fmt call
-                        #'-vf', 'yadif',                                 # Yet Another DeInterlace Filter
                         '-metadata', 'copyright="Media Archive for Central England"',  
                         '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"',             
                         '-c:a', 'aac',                                  # Audio set to AAC
@@ -116,10 +115,9 @@ def main():
                         '-to', out_point,
                         '-i', sys.argv[1],
                         '-i', watermark_path(aspect_ratio),
-                        '-filter_complex', 'overlay',
+                        '-filter_complex', 'yadif, overlay',
                         '-c:v', 'libx264',
                         '-pix_fmt', 'yuv420p',
-                        #'-vf', 'yadif',
                         '-metadata', 'copyright="Media Archive for Central England"',
                         '-metadata', 'comment="Please contact MACE to license this footage on 01522 837750"', 
                         '-c:a', 'aac',                       
@@ -143,7 +141,7 @@ def main():
                     ]
                     print(ffmpeg_call)
                     subprocess.call(ffmpeg_call)
-
+                    
 def display_aspect_ratio(ratio_string):
     # Get the numeric ratio from the aspect ratio string, e.g. "4:3" → 1.333(3)
 
