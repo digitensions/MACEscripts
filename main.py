@@ -55,10 +55,10 @@ def main():
 
         # If the path is a legitimate file...
         else:
-            to_trim = set_trim_status()
-            to_watermark = set_watermark_status()
-            # Ask user for their preferred output filename/filepath.
             output_path = set_output_path(input_file)
+
+            to_watermark = set_watermark_status()
+            to_trim = set_trim_status()
 
             # Get aspect ratio and watermark image.
             aspect_ratio = stream_aspect_ratio(input_file)
