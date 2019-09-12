@@ -68,8 +68,7 @@ def create_ffmpeg_command(input_file):
     to_trim = set_trim_status()
 
     aspect_ratio = stream_aspect_ratio(input_file)
-    dar = display_aspect_ratio(aspect_ratio)
-    watermark_file = watermark_path(aspect_ratio)
+    filtergraph = build_filtergraph(aspect_ratio, to_watermark)
 
     ffmpeg_program_call = [
         "ffmpeg"
@@ -79,13 +78,7 @@ def create_ffmpeg_command(input_file):
         "-i", input_file
     ]
 
-    watermark_settings = [
-        "-i", watermark_file,
-        "-filter_complex", "overlay"  # overlay filter for supplied png
-    ]
-
     stream_settings = [
-        # TODO "setdar=dar={0}".format(dar),   # set DAR to aspect ratio
         "-c:v",     "libx264",          # encode video stream as H.264
         "-pix_fmt", "yuv420p",          # 4:2:0 chroma subsubsampling
         "-c:a",     "aac",              # encode audio stream(s) as AAC
@@ -100,10 +93,7 @@ def create_ffmpeg_command(input_file):
     ]
 
     if not to_trim:
-        if to_watermark:
-            return ffmpeg_program_call + input_video_file + watermark_settings + stream_settings + output_settings
-        else:
-            return ffmpeg_program_call + input_video_file + stream_settings + output_settings
+        return ffmpeg_program_call + input_video_file + filtergraph + stream_settings + output_settings
 
     # If the user selects to trim...
     elif to_trim:
@@ -118,10 +108,26 @@ def create_ffmpeg_command(input_file):
             "-to", out_point
         ]
 
-        if to_watermark:
-            return ffmpeg_program_call + trim_settings + input_video_file + watermark_settings + stream_settings + output_settings
-        else:
-            return ffmpeg_program_call + trim_settings + input_video_file + stream_settings + output_settings
+        return ffmpeg_program_call + trim_settings + input_video_file + filtergraph + stream_settings + output_settings
+
+
+def build_filtergraph(aspect_ratio, to_watermark):
+    dar = display_aspect_ratio(aspect_ratio)
+    watermark_file = watermark_path(aspect_ratio)
+
+    general_filtergraph = [
+        "-vf", "setdar=dar={0}".format(dar) # set DAR (display aspect ratio) to aspect ratio
+    ]
+
+    watermark_settings = [
+        "-i",               watermark_file,
+        "-filter_complex", "setdar=dar={0},overlay".format(dar)
+    ]
+
+    if to_watermark:
+        return watermark_settings
+    else:
+        return general_filtergraph
 
 
 def display_aspect_ratio(ratio_string):
