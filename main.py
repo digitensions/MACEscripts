@@ -1,11 +1,10 @@
 # Coded by James Wingate, Katherine Frances Nagels and Joanna White
 
-import os
-import sys
-import ffmpeg
-import subprocess
 from ffprobe3 import FFProbe
+import os
 import re
+import subprocess
+import sys
 
 # The keys are the shortform name for each resolution,
 # corresponding to the expected .png watermark file.
@@ -55,95 +54,86 @@ def main():
 
         # If the path is a legitimate file...
         else:
-            to_trim = set_trim_status()
-            to_watermark = set_watermark_status()
-            # Ask user for their preferred output filename/filepath.
-            output_path = set_output_path(input_file)
+            ffmpeg_command = create_ffmpeg_command(input_file)
 
-            # Get aspect ratio and watermark image.
-            aspect_ratio = stream_aspect_ratio(input_file)
-            watermark_file = ffmpeg.input(watermark_path(aspect_ratio))
+            print("Transcoding with:", " ".join(ffmpeg_command), "\n")
 
-            # If the user selects to not trim...
-            if not to_trim:
-                if to_watermark:
-                    # Make the ffmpeg subprocess call.
-                    ffmpeg_call = [
-                        'ffmpeg',
-                        '-i', sys.argv[1],                              # calls path to file
-                        '-i', watermark_path(aspect_ratio),             # Path to watermark, dependent on input video DAR
-                        '-filter_complex', "[0]yadif=0:-1:1[v];[v][1]overlay",   # yadif deinterlace, overlay filter for supplied png
-                        '-c:v', 'libx264',                              # Output to H264 mp4
-                        '-pix_fmt', 'yuv420p',                          # 4:2:0 pix_fmt call
-                        '-metadata', 'copyright=Media Archive for Central England',  
-                        '-metadata', 'comment=Please contact MACE to license this footage on 01522 837750',             
-                        '-c:a', 'aac',                                  # Audio set to AAC
-                        '-report', output_path                          # Generates log (in cd directory)
-                    ]
-                    print(ffmpeg_call)
-                    subprocess.call(ffmpeg_call)
-                else:
-                    # Make the ffmpeg subprocess call.
-                    ffmpeg_call = [
-                        'ffmpeg',
-                        '-i', sys.argv[1],
-                        '-c:v', 'libx264',
-                        '-pix_fmt', 'yuv420p',
-                        '-vf', 'yadif',
-                        '-metadata', 'copyright=Media Archive for Central England',  
-                        '-metadata', 'comment=Please contact MACE to license this footage on 01522 837750',
-                        '-c:a', 'aac',    
-                        '-report', output_path
-                    ]
-                    print(ffmpeg_call)
-                    subprocess.call(ffmpeg_call)
+            subprocess.call(ffmpeg_command)
 
-            # If the user selects to trim...
-            elif to_trim:
-                # Get the start and end trim in points from the user.
-                in_point = set_timestamp(
-                    "Please specify the trim 'in' point")
-                out_point = set_timestamp(
-                    "Please specify the trim 'out' point")
 
-                if to_watermark:
-                    # Make the ffmpeg subprocess call.
-                    ffmpeg_call = [
-                        'ffmpeg', '-ss', in_point,
-                        '-to', out_point,
-                        '-i', sys.argv[1],
-                        '-i', watermark_path(aspect_ratio),
-                        '-filter_complex', "[0]yadif=0:-1:1[v];[v][1]overlay",
-                        '-c:v', 'libx264',
-                        '-pix_fmt', 'yuv420p',
-                        '-metadata', 'copyright=Media Archive for Central England',
-                        '-metadata', 'comment=Please contact MACE to license this footage on 01522 837750', 
-                        '-c:a', 'aac',                       
-                        '-report', output_path
-                    ]
-                    print(ffmpeg_call)
-                    subprocess.call(ffmpeg_call)
-                else:
-                    # Make the ffmpeg subprocess call.
-                    ffmpeg_call = [
-                        'ffmpeg', '-ss', in_point,
-                        '-to', out_point,
-                        '-i', input_file,
-                        '-c:v', 'libx264',
-                        '-pix_fmt', 'yuv420p',
-                        '-vf', 'yadif',
-                        '-metadata', 'copyright=Media Archive for Central England',
-                        '-metadata', 'comment=Please contact MACE to license this footage on 01522 837750',                        
-                        '-c:a', 'aac',                        
-                        '-report', output_path
-                    ]
-                    print(ffmpeg_call)
-                    subprocess.call(ffmpeg_call)
-                    
+def create_ffmpeg_command(input_file):
+    output_path = set_output_path(input_file)
+
+    to_watermark = set_watermark_status()
+    to_trim = set_trim_status()
+
+    aspect_ratio = stream_aspect_ratio(input_file)
+    filtergraph = build_filtergraph(aspect_ratio, to_watermark)
+
+    ffmpeg_program_call = [
+        "ffmpeg"
+    ]
+
+    input_video_file = [
+        "-i", input_file
+    ]
+
+    stream_settings = [
+        "-c:v",     "libx264",          # encode video stream as H.264
+        "-pix_fmt", "yuv420p",          # 4:2:0 chroma subsubsampling
+        "-c:a",     "aac",              # encode audio stream(s) as AAC
+        "-map",     "0",       "-dn"    # map all streams except data streams to output
+    ]
+
+    output_settings = [
+        "-metadata", "copyright=Media Archive for Central England",
+        "-metadata", "comment=Please contact MACE to license this footage on 01522 837750",
+        output_path,
+        "-report"     # Generates log in current directory
+    ]
+
+    if not to_trim:
+        return ffmpeg_program_call + input_video_file + filtergraph + stream_settings + output_settings
+
+    # If the user selects to trim...
+    elif to_trim:
+        # Get the start and end trim in points from the user.
+        in_point = set_timestamp(
+            "Please specify the trim 'in' point")
+        out_point = set_timestamp(
+            "Please specify the trim 'out' point")
+
+        trim_settings = [
+            "-ss", in_point,
+            "-to", out_point
+        ]
+
+        return ffmpeg_program_call + trim_settings + input_video_file + filtergraph + stream_settings + output_settings
+
+
+def build_filtergraph(aspect_ratio, to_watermark):
+    dar = display_aspect_ratio(aspect_ratio)
+    watermark_file = watermark_path(aspect_ratio)
+
+    general_filtergraph = [
+        "-vf", "setdar=dar={0}".format(dar) # set DAR (display aspect ratio) to aspect ratio
+    ]
+
+    watermark_settings = [
+        "-i",               watermark_file,
+        "-filter_complex", "setdar=dar={0},overlay".format(dar)
+    ]
+
+    if to_watermark:
+        return watermark_settings
+    else:
+        return general_filtergraph
+
+
 def display_aspect_ratio(ratio_string):
     # Get the numeric ratio from the aspect ratio string, e.g. "4:3" → 1.333(3)
 
-    numbers = ratio_string.split(':')
+    numbers = ratio_string.split(":")
     width = int(numbers[0])
     height = int(numbers[1])
 
@@ -211,7 +201,8 @@ def set_trim_status():
 
 
 def set_watermark_status():
-    use_watermark = input("Do you want a watermark overlay on the output video? ('y'/'n')\n")
+    use_watermark = input(
+        "Do you want a watermark overlay on the output video? ('y'/'n')\n")
 
     if not (use_watermark == "y" or use_watermark == "n"):
         print("Invalid input! I'll ask again")

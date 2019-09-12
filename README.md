@@ -33,12 +33,12 @@ python3 main.py /path_to_file/input.mov
 
 The script will ask:
 ```
-Do you want to trim this file? ('y'/'n')
-Do you want a watermark overlay on the output video? ('y'/'n')
-
 Where would you like the output saved?
 e.g. 'home/Dave/Desktop/output.mp4'
 Providing only a filename - e.g. 'file.mp4' - will export to the directory the script is in.
+
+Do you want a watermark overlay on the output video? ('y'/'n')
+Do you want to trim this file? ('y'/'n')
 
 # If being trimmed:
 Please specify the trim 'in' point. (hh:mm:ss.mls 00:00:00.000)
