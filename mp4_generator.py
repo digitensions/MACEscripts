@@ -87,7 +87,7 @@ def create_ffmpeg_command(input_file):
         "-c:v",     "libx264",          # encode video stream as H.264
         "-pix_fmt", "yuv420p",          # 4:2:0 chroma subsubsampling
         "-c:a",     "aac",              # encode audio stream(s) as AAC
-        "-map",     "0",       "-dn"    # map all streams except data streams to output
+        #"-map",     "0",       "-dn"   REMOVED: FFv1/Matroska fails with this call (map all streams except data streams to output)
     ]
 
     output_settings = [
