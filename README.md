@@ -28,7 +28,7 @@ We hope to test installation of Python3 and FFmpeg into VENV environments on Win
 
 To run the code call:
 ```bash
-python3 main.py /path_to_file/input.mov
+python3 mp4_generator.py /path_to_file/input.mov
 ```
 
 The script will ask:
