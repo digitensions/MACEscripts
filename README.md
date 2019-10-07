@@ -5,7 +5,7 @@ This repository contains python3 script(s) made collaboratively between James Wi
 
 We hope to add more in the future and welcome any comments, feedback and collaboration.
 
-# main.py
+# mp4_generator.py
 
 This script has been developed to trim a intraframe file, deinterlace, overlay a watermark for quick distribution to clients. It has metadata additions, which can be easily edited depending upon need.
 
@@ -37,6 +37,7 @@ Where would you like the output saved?
 e.g. 'home/Dave/Desktop/output.mp4'
 Providing only a filename - e.g. 'file.mp4' - will export to the directory the script is in.
 
+Do you want to deinterlace this file? ('y'/'n')
 Do you want a watermark overlay on the output video? ('y'/'n')
 Do you want to trim this file? ('y'/'n')
 
@@ -47,11 +48,11 @@ Please specify the trim 'out' point. (hh:mm:ss.mls 00:00:00.000)
 
 ### ⚠️ Warning ⚠️
 
-There may be inaccuracies experienced with the trim function in FFmpeg, caused by the in/out points skipping forward or backward to the nearest keyframe if using an interframe input file.  At present I'm unsure of a resolution for this issue, so please be mindful of this if you intend to use this code for actual archival MP4 production.  It's always best to work with intraframe codecs such as Uncompressed, FFV1, ProRes or DNxHD - though these haven't all been tested yet.
+There may be inaccuracies experienced with the trim function in FFmpeg, caused by the in/out points skipping forward or backward to the nearest keyframe if using an interframe input file (or a lossy file without gop set to 1).  Please be mindful of this if you intend to use this code for archival MP4 production.  It's always best to work with intraframe codecs such as Uncompressed, FFV1, ProRes etc.
 
 # main_new.py
 
-A variation on Main.py that first tested FFmpeg using subprocess calls. These have since been incorporated into main.py, and this script is redundant.
+A variation on mp4_generator.py that first tested FFmpeg using subprocess calls. These have since been incorporated into main.py, and this script is redundant.
 
 # name_change.py
 
