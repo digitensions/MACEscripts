@@ -64,6 +64,7 @@ def main():
 def create_ffmpeg_command(input_file):
     output_path = set_output_path(input_file)
 
+    to_deinterlace = set_deinterlace_status()
     to_watermark = set_watermark_status()
     to_trim = set_trim_status()
 
@@ -77,6 +78,10 @@ def create_ffmpeg_command(input_file):
     input_video_file = [
         "-i", input_file
     ]
+
+    deinterlace_settings = [
+        "-filter_complex",  "[0]yadif=0"    # deinterlace function using -filter_complex
+    ] 
 
     stream_settings = [
         "-c:v",     "libx264",          # encode video stream as H.264
@@ -92,11 +97,31 @@ def create_ffmpeg_command(input_file):
         "-report"     # Generates log in current directory
     ]
 
-    if not to_trim:
+    # If the user selects not to trim and to deinterlace...
+    if not to_trim and to_deinterlace:
+        return ffmpeg_program_call + input_video_file + filtergraph + deinterlace_settings + stream_settings + output_settings
+ 
+    # If the user selects not to trim and not to deinterlace...
+    elif not to_trim and not to_deinterlace:
         return ffmpeg_program_call + input_video_file + filtergraph + stream_settings + output_settings
 
-    # If the user selects to trim...
-    elif to_trim:
+    # If the user selects to trim and deinterlace...
+    elif to_trim and to_deinterlace:
+        # Get the start and end trim in points from the user.
+        in_point = set_timestamp(
+            "Please specify the trim 'in' point")
+        out_point = set_timestamp(
+            "Please specify the trim 'out' point")
+
+        trim_settings = [
+            "-ss", in_point,
+            "-to", out_point
+        ]
+
+        return ffmpeg_program_call + trim_settings + input_video_file + filtergraph + deinterlace_settings + stream_settings + output_settings
+
+   # If the user selects to trim and not to deinterlace...
+    elif to_trim and not to_deinterlace:
         # Get the start and end trim in points from the user.
         in_point = set_timestamp(
             "Please specify the trim 'in' point")
@@ -110,13 +135,12 @@ def create_ffmpeg_command(input_file):
 
         return ffmpeg_program_call + trim_settings + input_video_file + filtergraph + stream_settings + output_settings
 
-
 def build_filtergraph(aspect_ratio, to_watermark):
     dar = display_aspect_ratio(aspect_ratio)
     watermark_file = watermark_path(aspect_ratio)
 
     general_filtergraph = [
-        "-vf", "setdar=dar={0}".format(dar) # set DAR (display aspect ratio) to aspect ratio
+        "-filter_complex", "setdar=dar={0}".format(dar) # set DAR (display aspect ratio) to aspect ratio
     ]
 
     watermark_settings = [
@@ -188,6 +212,16 @@ def set_output_path(input_path):
               "Saving as default: {0}".format(default_output_path))
 
         return default_output_path
+
+
+def set_deinterlace_status():
+    deinterlace = input("Do you want to deinterlace this file? ('y'/'n')\n")
+
+    if not (deinterlace == "y" or deinterlace == "n"):
+        print("Invalid input! I'll ask again")
+        set_deinterlace_status()
+    else:
+        return deinterlace == "y"
 
 
 def set_trim_status():
