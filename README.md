@@ -1,9 +1,23 @@
 # MACEscripts
-Media Archive for Central England (MACE) generated python codes
+
+Media Archive for Central England (MACE) generated python scripts
 
 This repository contains python3 script(s) made collaboratively between James Wingate doctoral researcher in Computer Science at University of Lincoln and Joanna White of MACE, with excellent assistance from Katherine Frances.  Wherever possible these will be heavily notated to help MACE's python skill development, and for any individuals wishing to read or test them. Please note these are TRAINING SCRIPTS and require further development and testing.  The scripts are intended to fulfil AV preservation needs though, based on MACE workflows.
 
 We hope to add more in the future and welcome any comments, feedback and collaboration.
+
+# Project setup
+
+Dependencies:
+* [Python 3.7](https://www.python.org/downloads/)
+* [Pipenv](https://github.com/pypa/pipenv)
+  - used to manage dependencies and the virtual environment
+
+Set up the project by running:
+
+```bash
+pipenv install
+```
 
 # mp4_generator.py
 
@@ -17,18 +31,11 @@ It accepts the four archival audiovisual file dimensions kept at MACE:
 
 The `.png` watermarks are the same dimensions as the video files, with no interlacing. MACE currently is testing with a MACE logo, centralised and set at 20% opacity; the generic watermark files stored in `/watermarks` simply feature a copyright symbol for test purposes.
 
-## Dependencies
-
-* [FFmpeg](https://avpres.net/FFmpeg/#ch1)
-* [ffprobe3](https://github.com/DheerendraRathor/ffprobe3)
-
-We hope to test installation of Python3 and FFmpeg into VENV environments on Windows 10 devices preinstalled with Python2. If you don't have admin privileges this method could work for your testing. Read more here: [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
-
 ## Use
 
-To run the code call:
+To run the script call:
 ```bash
-python3 mp4_generator.py /path_to_file/input.mov
+pipenv run python mp4_generator.py /path/to/file/input.mov
 ```
 
 The script will ask:
@@ -48,7 +55,7 @@ Please specify the trim 'out' point. (hh:mm:ss.mls 00:00:00.000)
 
 ### ⚠️ Warning ⚠️
 
-There may be inaccuracies experienced with the trim function in FFmpeg, caused by the in/out points skipping forward or backward to the nearest keyframe if using an interframe input file (or a lossy file without gop set to 1).  Please be mindful of this if you intend to use this code for archival MP4 production.  It's always best to work with intraframe codecs such as Uncompressed, FFV1, ProRes etc.
+There may be inaccuracies experienced with the trim function in FFmpeg, caused by the in/out points skipping forward or backward to the nearest keyframe if using an interframe input file (or a lossy file without gop set to 1). Please be mindful of this if you intend to use this code for archival MP4 production. It's always best to work with intraframe codecs such as Uncompressed, FFV1, ProRes etc.
 
 # main_new.py
 
@@ -56,9 +63,9 @@ A variation on mp4_generator.py that first tested FFmpeg using subprocess calls.
 
 # name_change.py
 
-This code searches within named columns in an excel (xlsx or csv) file, then changes existing filename from Column 2 to Column 1. It was written to help with batch filename changes. It creates a variable that focuses on two (or more) column names for the search. It uses a for loop to work through the rows within the column that end with .mov. It uses pandas to match files to a row, extract the contents of the first column then changes all ':' to '.'. The script then uses os.rename to change the filename to the entry in Column 1.
+This code searches within named columns in an excel (xlsx or csv) file, then changes existing filename from Column 2 to Column 1. It was written to help with batch filename changes. It creates a variable that focuses on two (or more) column names for the search. It uses a for loop to work through the rows within the column that end with .mov. It uses pandas to match files to a row, extract the contents of the first column then changes all ':' to '.'. The script then uses `os.rename` to change the filename to the entry in Column 1.
 
 You would run this by first changing the code so your paths are correct (I might update this to take inputs in future), then run the command as:
-```
-python3 name_change.py
+```bash
+pipenv run python name_change.py
 ```
