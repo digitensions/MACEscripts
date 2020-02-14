@@ -13,7 +13,7 @@ Dependencies:
 * [Pipenv](https://github.com/pypa/pipenv)
   - used to manage dependencies and the virtual environment
 
-Set up the project by running:
+Set up the project firstly by installing pipenv by using pip (or pip3 if you've installed Python 3 that way):
 
 ```bash
 pip install pipenv
@@ -22,6 +22,12 @@ or if necessary
 
 ```bash
 pip3 install pipenv
+```
+Then initiate your pipenv using the following commands:
+
+```bash
+cd my_project
+pipenv install
 ```
 
 # mp4_generator.py
