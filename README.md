@@ -16,6 +16,11 @@ Dependencies:
 Set up the project by running:
 
 ```bash
+pip install pipenv
+```
+or if necessary
+
+```bash
 pip3 install pipenv
 ```
 
