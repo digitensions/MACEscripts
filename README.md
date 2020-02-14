@@ -16,7 +16,7 @@ Dependencies:
 Set up the project by running:
 
 ```bash
-pipenv install
+pip3 install pipenv
 ```
 
 # mp4_generator.py
