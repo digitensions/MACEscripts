@@ -174,8 +174,7 @@ def getWatermark(ratio):
                         standard = aspect[2]
 
         pngname = "{0}.png".format(standard)
-        pngpath = os.path.join(os.getcwd(), "watermarks", pngname)
-        return pngpath
+        return os.path.join(os.getcwd(), "watermarks", pngname)
 
 # Run the main function as entrypoint.
 if __name__ == '__main__':
