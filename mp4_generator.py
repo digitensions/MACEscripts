@@ -192,8 +192,7 @@ def watermark_path(ratio):
             standard = name  # sets standard to "HD", "SD", etc
 
     file_name = "{0}.png".format(standard)
-    file_path = os.path.join(os.getcwd(), "watermarks", file_name)
-    return file_path
+    return os.path.join(os.getcwd(), "watermarks", file_name)
 
 
 def set_output_path(input_path):
@@ -217,7 +216,7 @@ def set_output_path(input_path):
 def set_deinterlace_status():
     deinterlace = input("Do you want to deinterlace this file? ('y'/'n')\n")
 
-    if not (deinterlace == "y" or deinterlace == "n"):
+    if not deinterlace in ["y", "n"]:
         print("Invalid input! I'll ask again")
         set_deinterlace_status()
     else:
@@ -227,7 +226,7 @@ def set_deinterlace_status():
 def set_trim_status():
     trim = input("Do you want to trim this file? ('y'/'n')\n")
 
-    if not (trim == "y" or trim == "n"):
+    if not trim in ["y", "n"]:
         print("Invalid input! I'll ask again")
         set_trim_status()
     else:
@@ -238,7 +237,7 @@ def set_watermark_status():
     use_watermark = input(
         "Do you want a watermark overlay on the output video? ('y'/'n')\n")
 
-    if not (use_watermark == "y" or use_watermark == "n"):
+    if not use_watermark in ["y", "n"]:
         print("Invalid input! I'll ask again")
         set_watermark_status()
     else:

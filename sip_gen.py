@@ -51,12 +51,11 @@ def main():
 
         while True:
             img_seq = input('Do you need to process any image sequences? (y/n)\n')
-            if img_seq == 'y' or img_seq == 'n':
-                if img_seq == 'y':
-                    seq_dirs = handle_seq_dirs()
-                    print(get_seq_output(len(seq_dirs)))
-                else:
-                    break
+            if img_seq == 'y':
+                seq_dirs = handle_seq_dirs()
+                print(get_seq_output(len(seq_dirs)))
+            elif img_seq == 'n':
+                break
             else:
                 print('Please enter either \'y\', or \'n\'.\n')
 
@@ -70,7 +69,10 @@ def main():
 
         while True:
             job_name = input('Please enter a unique job name\n')
-            if not 1 in [c in job_name for c in INVALIDCHARS] and len(job_name) >= 2:
+            if (
+                1 not in [c in job_name for c in INVALIDCHARS]
+                and len(job_name) >= 2
+            ):
                 if not os.path.exists(os.path.join(output_path, job_name)):
                     os.mkdir(os.path.join(output_path, job_name))
                     break
@@ -140,7 +142,7 @@ def handle_seq_dirs():
     seq_paths = []
     while True:
         seq_dir = input('Please specify an image sequence directory\ne.g. path/to/image_directory\n(or \'n\' if you are done)\n').strip('\"')
-        if not seq_dir == 'n':
+        if seq_dir != 'n':
             if os.path.isdir(seq_dir):
                 seq_paths.append(seq_dir)
                 print('Input was a valid directory, saving...\n')
@@ -166,12 +168,9 @@ def check_initial(initial):
         return False
 
 def check_valid(media_info):
-    is_valid = False
-    for track in media_info.tracks:
-        if track.track_type == 'Video' or track.track_type == 'Audio':
-            is_valid = True
-
-    return is_valid
+    return any(
+        track.track_type in ['Video', 'Audio'] for track in media_info.tracks
+    )
 
 def gen_prefix():
     return '[{0}]'.format(str(datetime.now().time().strftime("%H:%M:%S")))
